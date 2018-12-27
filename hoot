@@ -1,0 +1,297 @@
+package Dic;
+
+
+import java.util.Scanner;
+
+public class HooT {
+    // number of indexes in hash table
+    private final static int Hashtable_size = 1200;
+    // initialise array of HashEntry (table)
+    Hoo[] Hashtable;
+    // constructor, create array, assign all values to null
+    HooT() {
+        // create array of HashEntry, predefined size
+    	Hashtable = new Hoo[Hashtable_size];
+    }
+
+
+    // from key, find the correct index, load the HashEntry object and return the value
+    public String getWord(String key) {
+    	  key=key.toLowerCase();
+        if(CheckKeyIndex(key)==true)
+        	return  "Nodata";
+        else{
+        	int index = this.getKeyIndex(key);
+            while(Hashtable[index].equals(key)==true){ //repeat doing it [(position = key) = true]
+    	        index++;
+    }
+        return Hashtable[index].getValue(key); // return key = word 
+        }
+    }
+
+    // creates a new HashEntry object, inserts that into the table array at the correct index
+    // determined by getKeyIndex(key)
+    public void AddWord(String key, String value) {
+        key=key.toLowerCase(); // Form A to a
+        System.out.println(key);
+        	int index = this.getKeyIndex(key); //Form String to Hash number
+        while(Hashtable[index]!=null){ // Loop repeat if index of array != null 
+        	index++;					// index = position in array
+        }								// position +1
+        Hashtable[index] = new Hoo(key, value); //create object to contain word and meaning
+        System.out.println(Hashtable[index]);
+    }
+    // ** PRIVATE FUNCTIONS ** //
+    // get index from key
+    public Integer getKeyIndex(String key) {
+    	//from https://stackoverflow.com/a/2624210
+        int Hashing = 7;
+        for (int i = 0; i < key.length(); i++) {
+            Hashing = (Hashing*31 + key.charAt(i))%1000;
+        }
+        return Hashing;
+    }
+    public boolean CheckKeyIndex(String key){
+    	  key=key.toLowerCase();							
+    	int index = this.getKeyIndex(key);
+    	return Hashtable[index]==null;// found = false // not found = true //
+    }
+    public void EditWord(String key,String value){
+    	  key=key.toLowerCase();
+            int index = this.getKeyIndex(key);						// do some thing
+                while(Hashtable[index].getKey().equals(key)!=true){
+                    index++;
+                }
+                Hashtable[index] = new Hash(key, value);
+    }
+    public void DeleteWord(String key){
+    	 key=key.toLowerCase();
+    	 int index = this.getKeyIndex(key);
+    	 Hashtable[index] = new Hoo(null,"null");
+    	 System.out.println("Your word "+key+" Delete complete!");
+    }
+    public void Display(){
+        Scanner Input = new Scanner(System.in);
+        	System.out.println("===============|| Word Menu ||===============");
+        	System.out.println("1. Search ����");
+        	System.out.println("2. Add word ������Ѿ��");
+        	System.out.println("3. Delete word ź���Ѿ�� ");
+        	System.out.println("4. Exit Program �͡�ҡ�����");
+        	System.out.println("============================");
+        System.out.print("Enter choice ���͡���ٷ���ͧ��� : ");
+        //choice code//
+         int choice = Input.nextInt();
+                    switch(choice){
+                    
+                        case 1 :System.out.print("Enter word ��س������Ѿ�����ͧ��ä鹿� : ");
+                                String Search = Input.next() ;
+                                System.out.println("Word Found ���� : "+ getWord(Search) );
+                                Display1(Search); 
+                                break;
+                                
+                        case 2 :System.out.print("Add word ������Ѿ�� : ");
+                                String Addword = Input.next();
+                                System.out.print("Add meaning ����������Ѿ�� : ");
+                                String Addmeaning = Input.next();
+                                AddWord(Addword, Addmeaning);
+                                Display();   
+                                break;
+                        
+                        case 3 :System.out.print("Enter word for delete �����Ѿ�����ͧ���ź : ");
+                                String Delete = Input.next() ;
+                                DeleteWord(Delete);
+                                Display();
+                                break;
+
+                        case 4 :System.out.print(" --------------End Program-------------- ");    
+                        		break;
+                        		
+                        default :System.out.print("Enter number 1/2/3/4 only!");
+                    }
+    }
+    public void Display1(String key){
+         Scanner Input = new Scanner(System.in);
+            System.out.println("===============|| Main Menu ||===============");
+            System.out.println("1. Next word ���Ѿ�����");
+            System.out.println("2. Previous word ���Ѿ���͹˹�� ");
+            System.out.println("3. Edit word ��䢤��Ѿ��");
+            System.out.println("4. Exit to Main Menu �͡价��˹��������ѡ");
+            System.out.println("====================================");
+            System.out.print("Enter choice ���͡���ٷ���ͧ��� : ");
+          //choice code//
+            int choice = Input.nextInt();
+            switch(choice)
+            {
+                case 1 :
+                    key = NextPrevious(key,0);
+                    	System.out.println("Next word is '"+key+"'");
+                    	System.out.println("���Ѿ�����'"+key+"'");
+                    Display1(key);                      
+                    break;
+                case 2 :
+                    key = NextPrevious(key,1);
+                    	System.out.println("Previous word is '"+key+"'");
+                    	System.out.println("���Ѿ���͹˹��'"+key+"'");
+                    Display1(key);                       
+                    break;
+                case 3 : 
+                    System.out.print("Edit word ��䢤��Ѿ��  : ");
+                    	String EditWord = Input.next() ;
+                    System.out.print("Edit meaning ��䢤��� : ");
+                    	String EditMeaning = Input.next() ;
+                    EditWord(EditWord,EditMeaning);
+                    Display(); 
+                    break;
+                case 4 :
+                	Display(); 
+                    break;
+                default :System.out.print("No choice Match");
+                	Display(); 
+            }
+    }
+    
+    public void wordSample(){
+      //a//
+        AddWord("Able","สามารถ"); 
+        AddWord("Across","ข้าม");
+        AddWord("Art","ศิลปะ");
+        AddWord("Apple","แอปเปิ้ล");
+      //b//
+        AddWord("Bird", "นก");
+        AddWord("Bad","เลว");
+        AddWord("Bark","เห่าก");
+        AddWord("Bitch","ผู้หญิงเลว");
+      //c//        
+        AddWord("Cock","ไก่ตัวผู้");
+        AddWord("Cow","วัว");
+        AddWord("Cross","กากบาท");
+        AddWord("Cat","แมว");
+      //d//         
+        AddWord("Dark","มืด");
+        AddWord("Deep","ลึก");
+        AddWord("Dog","สุนัข");
+        AddWord("Drum","กลอง");
+      //e//        
+        AddWord("Expert","ผู้เชียวชาญ");
+        AddWord("Extra","พิเศษ");
+        AddWord("External","ภายนอก");
+        AddWord("Egg","ไข่");
+      //f//       
+        AddWord("Fight","ต่อสู้");
+        AddWord("Fix","แก้ไข");
+        AddWord("Fur","ขน");
+        AddWord("Fill","เติม");
+      //g//        
+        AddWord("Glow","เรืองแสง");
+        AddWord("Grace","ความสง่างาม");
+        AddWord("Groove","ร่อง");
+        AddWord("Glove","ถุงมือ");
+      //h//        
+        AddWord("High","สูง");
+        AddWord("Hope","ความหวัง");
+        AddWord("Horny","มีความต้องการทางเพศ");
+        AddWord("Hunter","นักล่า");
+      //i//        
+        AddWord("Ignition","การเผาไหม่");
+        AddWord("Immortal","อมตะ");
+        AddWord("Infamous","เลว");
+        AddWord("Infection","การติดเชื้อ");
+      //j//        
+        AddWord("Jealous","อิจฉา");
+        AddWord("Jerk","การกรพตุก");
+        AddWord("Justice","ความยุติธรรม");
+        AddWord("Juggernaut","สื่งที่ใหญ่โตและมีกำลังมหาศาล");
+      //k//        
+        AddWord("Keep","เก็บรักษา");
+        AddWord("King","ราชา");
+        AddWord("Knowledge","ความรู้");
+        AddWord("Knot","ปม");
+      //l//        
+        AddWord("Lie","โกหก");
+        AddWord("Loop","ทำซ้ำ");
+        AddWord("Love","ความรัก");
+        AddWord("Laid","ได้ปล่อยแล้ว");
+      //m//        
+        AddWord("Merge","ผสาน");
+        AddWord("Might","อาจจะ");
+        AddWord("Moan","คราง");
+        AddWord("Moon","ดวงจันทร์");
+      //n//        
+        AddWord("Naked","เปลือย");
+        AddWord("Neat","เรียบร้อย");
+        AddWord("Nice","ดี");
+        AddWord("New","ใหม่");
+      //o//        
+        AddWord("Obey","เชื่อฟัง");
+        AddWord("Oracle","คำพยากรณ์");
+        AddWord("Oxygen","ออกซิเจน");
+        AddWord("Order","คำสั่ง");
+      //p//        
+        AddWord("Pike","เธฃเธฑเธ�เธชเธ เธฒ");
+        AddWord("Punish","ลงโทษ");
+        AddWord("Pussy","ของลับของผู้หญิง");
+      //r//        
+        AddWord("Quarter","เสี้ยวหนึ่ง");
+        AddWord("Question","คำถาม");
+        AddWord("Quintessence","แก่นสาร");
+      //r//        
+        AddWord("Register","สมัคร");
+        AddWord("Raw","ดิบ");
+        AddWord("Rough","หยาบ");
+      //t//         
+        AddWord("Squirt","พ่น");
+        AddWord("Swallow","กลืน");
+        AddWord("Swing","แกว่ง");
+      //t//          
+        AddWord("Tear","น้ำตา");
+        AddWord("Thug","อันธพาล");
+        AddWord("Thief","ขโมย");
+      //u//       
+        AddWord("Underground","ใต้ดิน");
+        AddWord("Upset","อารมณ์เสีย");
+        AddWord("Urgent","ด่วน");
+      //v//        
+        AddWord("Various","หลากหลาย");
+        AddWord("Vulture","อีแร้ง");
+        AddWord("Venomous","มีพิษ");
+      //w//       
+        AddWord("Warehouse","โกดัง");
+        AddWord("Warzone","สมรภูมิ");
+        AddWord("Weed","กัญชา");
+        AddWord("Whisper","กระซิบ");
+      //x//   
+        AddWord("X-ray","เอ็กซ์เรย์");
+        AddWord("Xerox","สำเนาซีรอกซ์");
+        AddWord("Xylophone","ระนาด");
+        AddWord("Xenophobic","เกลียดกลัวชาวต่างประเทศ");
+      //y//
+        AddWord("Yacht","เรือยอชท์");
+        AddWord("Yield","ผล");
+        AddWord("Yarn","เส้นด้าย");
+        AddWord("Yummy","อร่อย");
+      //z//
+        AddWord("Zany","ตัวตลก"); 
+        AddWord("Zenith","สุดยอด");
+        AddWord("Zine","สังกะสี");
+        AddWord("Zest","ความเอร็ดอร่อย");
+    }
+    
+    public String NextPrevious(String key,int list){
+    	
+    	key= key.toLowerCase();
+        int index = getKeyIndex(key);
+        
+        if(list==0){
+            index++;
+             while(Hashtable[index]==null){
+            	 index++;
+             }
+        }
+        else{ index--;
+                 while(Hashtable[index]==null){
+                	 index--;
+                 }
+        }
+            return  Hashtable[index].getKey();
+    }
+}
